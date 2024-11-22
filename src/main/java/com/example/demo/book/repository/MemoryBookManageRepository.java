@@ -4,14 +4,14 @@ import com.example.demo.book.entity.Book;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class MemoryBookManageRepository implements BookManageRepository{
 
-    static Map<Long, Book> bookStore = new HashMap<>();
+    static Map<Long, Book> bookStore = new ConcurrentHashMap<>();
     long sequence = 0L;
 
     @Override

@@ -9,35 +9,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class bookManageController {
+public class BookManageController {
 
     private final BookManageService bookManageService;
 
-    public bookManageController(BookManageService bookManageService) {
+    public BookManageController(BookManageService bookManageService) {
         this.bookManageService = bookManageService;
     }
 
-    @PostMapping("/api/save/book")
+    @PostMapping("/api/v1/books")
     public Book saveBook(@RequestBody Book book){
         return bookManageService.saveBook(book);
     }
 
-    @GetMapping("/api/get/book/list")
+    @GetMapping("/api/v1/books")
     public List<Book> getBookList(){
         return bookManageService.getBookList();
     }
 
-    @GetMapping("/api/get/book/{id}")
+    @GetMapping("/api/v1/books/{id}")
     public Book getBook(@Parameter(name = "id", description = "id", example = "1",in = ParameterIn.PATH) @PathVariable("id") Long id){
         return bookManageService.getBook(id);
     }
 
-    @PutMapping("/api/update/book/{id}")
+    @PutMapping("/api/v1/books/{id}")
     public Book updateBook(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id, @RequestBody Book updatedBook){
         return bookManageService.updateBook(id, updatedBook);
     }
 
-    @DeleteMapping("/api/delete/book/{id}")
+    @DeleteMapping("/api/v1/books/{id}")
     public boolean deleteBook(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id){
         return bookManageService.deleteBook(id);
     }
