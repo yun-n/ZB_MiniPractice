@@ -1,60 +1,52 @@
 package com.example.demo.book.service;
 
 import com.example.demo.book.entity.Book;
-import com.example.demo.book.repository.BookManageRepository;
+import com.example.demo.book.repository.JpaBookManageRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class BookManageService {
 
-    private final BookManageRepository bookManageRepository;
+    private final JpaBookManageRepository jpaBookManageRepository;
 
-    public BookManageService(BookManageRepository bookManageRepository) {
-        this.bookManageRepository = bookManageRepository;
+    public BookManageService(JpaBookManageRepository jpaBookManageRepository) {
+        this.jpaBookManageRepository = jpaBookManageRepository;
     }
 
     public Book saveBook(Book book) {
-        return bookManageRepository.save(book);
+        return jpaBookManageRepository.save(book);
     }
 
     public List<Book> getBookList() {
-        return bookManageRepository.findAll();
+        return jpaBookManageRepository.findAll();
     }
 
     public Book getBook(Long id) {
-        Book book = bookManageRepository.findById(id);
-
-        if(book == null){
-            throw new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다.");
-        }
+        Book book = jpaBookManageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
 
         return book;
     }
 
+    @Transactional
     public Book updateBook(Long id, Book updatedBook) {
-        Book book = bookManageRepository.findById(id);
+        Book book = jpaBookManageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
 
-        if(book == null){
-            throw new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다.");
-        }
+        book.update(updatedBook);
 
-        book.setBookName(updatedBook.getBookName());
-        book.setBookWriter(updatedBook.getBookWriter());
-        book.setYear(updatedBook.getYear());
-        book.setISBN(updatedBook.getISBN());
-
-        return bookManageRepository.save(book);
+        return new Book(book);
     }
 
     public boolean deleteBook(Long id) {
-        Book book = bookManageRepository.findById(id);
+        Book book = jpaBookManageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
 
-        if(book == null){
-            throw new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다.");
-        }
+        jpaBookManageRepository.deleteById(id);
 
-        return bookManageRepository.deleteById(id);
+        return true;
     }
 }
