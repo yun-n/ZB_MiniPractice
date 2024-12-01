@@ -25,10 +25,8 @@ public class BookManageService {
     }
 
     public Book getBook(Long id) {
-        Book book = jpaBookManageRepository.findById(id)
+        return jpaBookManageRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
-
-        return book;
     }
 
     @Transactional
@@ -42,7 +40,7 @@ public class BookManageService {
     }
 
     public boolean deleteBook(Long id) {
-        Book book = jpaBookManageRepository.findById(id)
+        jpaBookManageRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
 
         jpaBookManageRepository.deleteById(id);
