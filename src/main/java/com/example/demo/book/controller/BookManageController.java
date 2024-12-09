@@ -25,7 +25,7 @@ public class BookManageController {
 //    }
 
     @PostMapping("/api/v1/books")
-    public Book saveBookWithTagsAndCategory(@RequestBody BookRequestDto bookRequestDto){
+    public BookResponseDto saveBookWithTagsAndCategory(@RequestBody BookRequestDto bookRequestDto){
         return bookManageService.saveBookWithTagsAndCategory(bookRequestDto);
     }
 
@@ -40,7 +40,7 @@ public class BookManageController {
     }
 
     @PutMapping("/api/v1/books/{id}")
-    public Book updateBook(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id, @RequestBody Book updatedBook){
+    public BookResponseDto updateBook(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id, @RequestBody BookRequestDto updatedBook){
         return bookManageService.updateBook(id, updatedBook);
     }
 

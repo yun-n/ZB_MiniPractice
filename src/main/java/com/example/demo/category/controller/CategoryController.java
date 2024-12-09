@@ -1,10 +1,10 @@
 package com.example.demo.category.controller;
 
+import com.example.demo.category.dto.CategoryRequestDto;
 import com.example.demo.category.dto.CategoryResponseDto;
+import com.example.demo.category.dto.CategoryResultResponseDto;
 import com.example.demo.category.entity.Category;
 import com.example.demo.category.service.CategoryService;
-import com.example.demo.tag.dto.TagResponseDto;
-import com.example.demo.tag.entity.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +21,17 @@ public class CategoryController {
     }
 
     @GetMapping("/api/v1/categories")
-    public List<Category> getCategoryList(){
+    public List<CategoryResponseDto> getCategoryList(){
         return categoryService.getCategoryList();
     }
 
     @PostMapping("/api/v1/categories")
-    public Category saveCategory(@RequestBody Category category){
-        return categoryService.saveCategory(category);
+    public CategoryResponseDto saveCategory(@RequestBody CategoryRequestDto categoryRequestDto){
+        return categoryService.saveCategory(categoryRequestDto);
     }
 
     @DeleteMapping("/api/v1/categories/{id}")
-    public CategoryResponseDto deleteCategory(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id){
+    public CategoryResultResponseDto deleteCategory(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id){
         return categoryService.deleteCategory(id);
     }
 }

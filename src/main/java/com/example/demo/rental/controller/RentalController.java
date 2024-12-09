@@ -1,5 +1,6 @@
 package com.example.demo.rental.controller;
 
+import com.example.demo.rental.dto.RentalResponseDto;
 import com.example.demo.rental.entity.Rental;
 import com.example.demo.rental.service.RentalService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,12 +18,12 @@ public class RentalController {
     }
 
     @PostMapping("/api/v1/rentals")
-    public Rental rentBook(@RequestParam(value = "memberId") Long memberId, @RequestParam(value = "bookId") Long bookId){
+    public RentalResponseDto rentBook(@RequestParam(value = "memberId") Long memberId, @RequestParam(value = "bookId") Long bookId){
         return rentalService.rentBook(memberId, bookId);
     }
 
-    @PutMapping("/api/v1/rentals/return/{rentalId}")
-    public Rental returnBook(@Parameter(name = "rentalId", description = "rentalId", example = "1",in = ParameterIn.PATH) @PathVariable("rentalId")  Long rentalId){
+    @PutMapping("/api/v1/rentals/{rentalId}/return")
+    public RentalResponseDto returnBook(@Parameter(name = "rentalId", description = "rentalId", example = "1",in = ParameterIn.PATH) @PathVariable("rentalId")  Long rentalId){
         return rentalService.returnBook(rentalId);
     }
 }
