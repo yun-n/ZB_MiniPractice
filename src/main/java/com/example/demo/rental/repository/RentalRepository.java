@@ -14,4 +14,5 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
     long countByMemberIdAndIsReturnedFalse(Long memberId);
 
     List<Rental> findByBookIdAndIsReturnedFalse(Long memberId);
+
 }
