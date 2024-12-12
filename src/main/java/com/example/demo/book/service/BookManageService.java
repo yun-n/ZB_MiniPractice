@@ -32,7 +32,7 @@ public class BookManageService {
 //    }
 
     @Transactional
-    public Book saveBookWithTagsAndCategory(BookRequestDto bookRequestDto){
+    public BookResponseDto saveBookWithTagsAndCategory(BookRequestDto bookRequestDto){
         Book book = new Book(bookRequestDto);
 
         for(String tagName : bookRequestDto.getTagNames()){
@@ -46,7 +46,8 @@ public class BookManageService {
             book.setCategory(category);
         }
 
-        return jpaBookManageRepository.save(book);
+        Book savedBook = jpaBookManageRepository.save(book);
+        return new BookResponseDto(savedBook);
     }
 
     public List<BookResponseDto> getBookList() {
@@ -59,13 +60,13 @@ public class BookManageService {
     }
 
     @Transactional
-    public Book updateBook(Long id, Book updatedBook) {
+    public BookResponseDto updateBook(Long id, BookRequestDto updatedBook) {
         Book book = jpaBookManageRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
 
         book.update(updatedBook);
 
-        return new Book(book);
+        return new BookResponseDto(book);
     }
 
     public boolean deleteBook(Long id) {

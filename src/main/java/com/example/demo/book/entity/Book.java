@@ -9,10 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -59,7 +56,7 @@ public class Book {
         category.getBooks().add(this);
     }
 
-    public void update(Book book){
+    public void update(BookRequestDto book){
         this.bookName = book.getBookName();
         this.bookWriter = book.getBookWriter();
         this.year = book.getYear();
