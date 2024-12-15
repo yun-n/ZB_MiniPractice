@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface JpaBookManageRepository extends JpaRepository<Book, Long> {
 
     //해당 엔터티를 다른 트랜잭션에서 읽거나 수정하지 못하도록 락을 설정
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT b FROM Book b WHERE b.id = :id")
-    Optional<Book> findByIdWithLock(@Param("id") Long id);
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Query("SELECT b FROM Book b WHERE b.id = :id")
+//    Optional<Book> findByIdWithLock(@Param("id") Long id);
 }

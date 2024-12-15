@@ -29,6 +29,9 @@ public class Book {
 
     private String ISBN;
 
+    @Version
+    private Integer version;  // Optimistic Lock 관리를 위한 버전 필드
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

@@ -1,11 +1,9 @@
 package com.example.demo.rental.controller;
 
 import com.example.demo.rental.dto.RentalResponseDto;
-import com.example.demo.rental.entity.Rental;
 import com.example.demo.rental.service.RentalService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
