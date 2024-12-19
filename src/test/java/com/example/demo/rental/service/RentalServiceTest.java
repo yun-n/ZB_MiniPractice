@@ -51,7 +51,7 @@ class RentalServiceTest {
         Rental rental = new Rental(member, book);
 
         Mockito.when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        Mockito.when(jpaBookManageRepository.findByIdWithLock(bookId)).thenReturn(Optional.of(book));
+//        Mockito.when(jpaBookManageRepository.findByIdWithLock(bookId)).thenReturn(Optional.of(book));
         Mockito.when(rentalRepository.findByBookIdAndIsReturnedFalse(bookId)).thenReturn(List.of());
         Mockito.when(rentalRepository.countByMemberIdAndIsReturnedFalse(memberId)).thenReturn(0L);
         Mockito.when(rentalRepository.save(Mockito.any(Rental.class))).thenReturn(rental);

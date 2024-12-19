@@ -21,6 +21,8 @@ public class BookResponseDto {
 
     private String ISBN;
 
+    private int bookQuantity;
+
     private String categoryCode;
 
     private String categoryName;
@@ -33,6 +35,7 @@ public class BookResponseDto {
         this.bookWriter = book.getBookWriter();
         this.year = book.getYear();
         this.ISBN = book.getISBN();
+        this.bookQuantity = book.getBookQuantity();
         if(book.getCategory() != null){
             this.categoryCode = book.getCategory().getCode();
             this.categoryName = book.getCategory().getName();

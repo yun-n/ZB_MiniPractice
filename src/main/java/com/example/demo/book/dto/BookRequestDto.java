@@ -15,4 +15,5 @@ public class BookRequestDto {
     private List<String> tagNames;
     private String categoryCode;
     private String categoryName;
+    private int bookQuantity;
 }
