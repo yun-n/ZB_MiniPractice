@@ -29,11 +29,15 @@ public class Book {
 
     private String ISBN;
 
+    private int rentalCount;
+
+    private int bookQuantity;
+
     @Version
     private Integer version;  // Optimistic Lock 관리를 위한 버전 필드
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private Category category;
 
     @ManyToMany
@@ -43,6 +47,17 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags = new HashSet<>();
+
+    public void rentBook() {
+        if (bookQuantity <= 0) {
+            throw new IllegalStateException("대여 가능 수량이 부족합니다.");
+        }
+        this.bookQuantity--;
+    }
+
+    public void returnBook() {
+        this.bookQuantity++;
+    }
 
     public void addTag(Tag tag) {
         tags.add(tag);
@@ -64,6 +79,7 @@ public class Book {
         this.bookWriter = book.getBookWriter();
         this.year = book.getYear();
         this.ISBN = book.getISBN();
+        this.bookQuantity = book.getBookQuantity();
     }
 
     public Book(Book entity){
@@ -72,6 +88,7 @@ public class Book {
         this.bookWriter = entity.getBookWriter();
         this.year = entity.getYear();
         this.ISBN = entity.getISBN();
+        this.bookQuantity = entity.getBookQuantity();
     }
 
     @Builder
@@ -80,6 +97,7 @@ public class Book {
         this.bookWriter = bookRequestDto.getBookWriter();
         this.year = bookRequestDto.getYear();
         this.ISBN = bookRequestDto.getISBN();
+        this.bookQuantity = bookRequestDto.getBookQuantity();
     }
 
 
