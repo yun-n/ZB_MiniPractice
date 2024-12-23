@@ -2,6 +2,8 @@ package com.example.demo.book.entity;
 
 import com.example.demo.book.dto.BookRequestDto;
 import com.example.demo.category.entity.Category;
+import com.example.demo.exception.AppException;
+import com.example.demo.exception.ErrorCode;
 import com.example.demo.tag.entity.Tag;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -50,7 +52,7 @@ public class Book {
 
     public void rentBook() {
         if (bookQuantity <= 0) {
-            throw new IllegalStateException("대여 가능 수량이 부족합니다.");
+            throw new AppException(ErrorCode.EXCEEDED_LIMIT_RENTAL_BOOK);
         }
         this.bookQuantity--;
     }

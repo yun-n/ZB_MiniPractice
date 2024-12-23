@@ -5,6 +5,8 @@ import com.example.demo.category.dto.CategoryResponseDto;
 import com.example.demo.category.dto.CategoryResultResponseDto;
 import com.example.demo.category.entity.Category;
 import com.example.demo.category.repository.CategoryRepository;
+import com.example.demo.exception.AppException;
+import com.example.demo.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryResultResponseDto deleteCategory(Long id) {
-        categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("카테고리" + id + " 찾을 수 없습니다."));
+        categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND_CATEGORY_ID, id));
 
         categoryRepository.removeCategoryFromBooks(id);
 

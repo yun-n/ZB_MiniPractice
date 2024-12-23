@@ -6,6 +6,8 @@ import com.example.demo.book.entity.Book;
 import com.example.demo.book.repository.JpaBookManageRepository;
 import com.example.demo.category.entity.Category;
 import com.example.demo.category.repository.CategoryRepository;
+import com.example.demo.exception.AppException;
+import com.example.demo.exception.ErrorCode;
 import com.example.demo.tag.entity.Tag;
 import com.example.demo.tag.repository.TagRepository;
 import org.springframework.stereotype.Service;
@@ -32,17 +34,17 @@ public class BookManageService {
 //    }
 
     @Transactional
-    public BookResponseDto saveBookWithTagsAndCategory(BookRequestDto bookRequestDto){
+    public BookResponseDto saveBookWithTagsAndCategory(BookRequestDto bookRequestDto) {
         Book book = new Book(bookRequestDto);
 
-        for(String tagName : bookRequestDto.getTagNames()){
+        for (String tagName : bookRequestDto.getTagNames()) {
             Tag tag = tagRepository.findByName(tagName)
                     .orElseGet(() -> tagRepository.save(new Tag(tagName)));
             book.addTag(tag);
         }
         if (!bookRequestDto.getCategoryName().isEmpty() && !bookRequestDto.getCategoryCode().isEmpty()) {
             Category category = categoryRepository.findByName(bookRequestDto.getCategoryName())
-                    .orElseGet(() -> categoryRepository.save(new Category(bookRequestDto.getCategoryName(),bookRequestDto.getCategoryCode())));
+                    .orElseGet(() -> categoryRepository.save(new Category(bookRequestDto.getCategoryName(), bookRequestDto.getCategoryCode())));
             book.setCategory(category);
         }
 
@@ -56,13 +58,13 @@ public class BookManageService {
 
     public BookResponseDto getBook(Long id) {
         return jpaBookManageRepository.findById(id).map(BookResponseDto::new)
-                .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND_BOOK_ID, id));
     }
 
     @Transactional
     public BookResponseDto updateBook(Long id, BookRequestDto updatedBook) {
         Book book = jpaBookManageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND_BOOK_ID, id));
 
         book.update(updatedBook);
 
@@ -71,7 +73,7 @@ public class BookManageService {
 
     public boolean deleteBook(Long id) {
         Book book = jpaBookManageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("도서" + id + " 를 찾을 수 없습니다."));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND_BOOK_ID, id));
 
         book.getTags().forEach(tag -> tag.getBooks().remove(book));
         book.getCategory().getBooks().remove(book);
