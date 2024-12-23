@@ -11,20 +11,18 @@ import com.example.demo.rental.dto.MemberRentalStat;
 import com.example.demo.rental.dto.RentalResponseDto;
 import com.example.demo.rental.entity.Rental;
 import com.example.demo.rental.repository.RentalRepository;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.example.demo.rental.Contant.RENTAL_LIMIT_COUNT;
 
@@ -61,7 +59,7 @@ public class RentalService {
             Rental savedRental = rentalRepository.save(rental);
 
             return new RentalResponseDto(savedRental);
-        } catch (OptimisticEntityLockException e){
+        } catch (OptimisticLockingFailureException|OptimisticEntityLockException e){
             throw new AppException(ErrorCode.FAILED_RENTAL_BOOK_WITH_LOCK, e);
         }
     }
@@ -79,7 +77,7 @@ public class RentalService {
             rental.setReturned(true);
 
             return new RentalResponseDto(rental);
-        } catch (OptimisticEntityLockException e){
+        } catch (OptimisticLockingFailureException|OptimisticEntityLockException e){
             throw new AppException(ErrorCode.FAILED_RENTAL_BOOK_WITH_LOCK, e);
         }
     }

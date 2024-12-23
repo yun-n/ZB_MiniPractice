@@ -18,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(indexes = @Index(name = "idx_book_categoryid", columnList = "category_id"))
 public class Book {
 
     @Id
@@ -46,7 +47,7 @@ public class Book {
     private Integer version;  // Optimistic Lock 관리를 위한 버전 필드
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Category category;
 
     @ManyToMany
