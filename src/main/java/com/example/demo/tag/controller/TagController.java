@@ -7,6 +7,7 @@ import com.example.demo.tag.entity.Tag;
 import com.example.demo.tag.service.TagService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +20,7 @@ public class TagController {
     }
 
     @PostMapping("/api/v1/tags")
-    public TagResponseDto saveTag(@RequestBody TagRequestDto tagRequestDto){
+    public TagResponseDto saveTag(@Valid @RequestBody TagRequestDto tagRequestDto){
         return tagService.saveTag(tagRequestDto);
     }
 

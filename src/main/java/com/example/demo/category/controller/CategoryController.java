@@ -7,6 +7,7 @@ import com.example.demo.category.entity.Category;
 import com.example.demo.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class CategoryController {
     }
 
     @PostMapping("/api/v1/categories")
-    public CategoryResponseDto saveCategory(@RequestBody CategoryRequestDto categoryRequestDto){
+    public CategoryResponseDto saveCategory(@Valid @RequestBody CategoryRequestDto categoryRequestDto){
         return categoryService.saveCategory(categoryRequestDto);
     }
 

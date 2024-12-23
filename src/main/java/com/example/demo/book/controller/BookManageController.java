@@ -6,6 +6,7 @@ import com.example.demo.book.entity.Book;
 import com.example.demo.book.service.BookManageService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class BookManageController {
 //    }
 
     @PostMapping("/api/v1/books")
-    public BookResponseDto saveBookWithTagsAndCategory(@RequestBody BookRequestDto bookRequestDto){
+    public BookResponseDto saveBookWithTagsAndCategory(@Valid @RequestBody BookRequestDto bookRequestDto){
         return bookManageService.saveBookWithTagsAndCategory(bookRequestDto);
     }
 
@@ -40,7 +41,8 @@ public class BookManageController {
     }
 
     @PutMapping("/api/v1/books/{id}")
-    public BookResponseDto updateBook(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id, @RequestBody BookRequestDto updatedBook){
+    public BookResponseDto updateBook(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id,
+                                      @RequestBody @Valid BookRequestDto updatedBook){
         return bookManageService.updateBook(id, updatedBook);
     }
 

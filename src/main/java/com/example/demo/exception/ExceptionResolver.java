@@ -1,6 +1,9 @@
 package com.example.demo.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,5 +19,11 @@ public class ExceptionResolver {
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         return ResponseEntity.status(500)
                 .body(new ErrorResponse("999999", ex.getMessage()));
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class, MissingServletRequestParameterException.class, ConstraintViolationException.class})
+    public ResponseEntity<ErrorResponse> handleValidationException(Exception ex) {
+        return ResponseEntity.status(400)
+                .body(new ErrorResponse("999998", ex.getMessage()));
     }
 }
