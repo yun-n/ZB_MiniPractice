@@ -7,6 +7,8 @@ import com.example.demo.book.service.BookManageService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,8 +49,9 @@ public class BookManageController {
     }
 
     @DeleteMapping("/api/v1/books/{id}")
-    public boolean deleteBook(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id){
-        return bookManageService.deleteBook(id);
+    public ResponseEntity<Void> deleteBook(@Parameter(name = "id", description = "id", example = "1", in = ParameterIn.PATH) @PathVariable("id") Long id){
+        bookManageService.deleteBook(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

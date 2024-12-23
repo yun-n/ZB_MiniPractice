@@ -2,11 +2,8 @@ package com.example.demo.category.service;
 
 import com.example.demo.category.dto.CategoryRequestDto;
 import com.example.demo.category.dto.CategoryResponseDto;
-import com.example.demo.category.dto.CategoryResultResponseDto;
 import com.example.demo.category.entity.Category;
 import com.example.demo.category.repository.CategoryRepository;
-import com.example.demo.exception.AppException;
-import com.example.demo.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +30,10 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResultResponseDto deleteCategory(Long id) {
-        categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND_CATEGORY_ID, id));
-
-        categoryRepository.removeCategoryFromBooks(id);
-
-        categoryRepository.deleteById(id);
-        return new CategoryResultResponseDto(true);
-
+    public void deleteCategory(Long id) {
+        categoryRepository.findById(id).ifPresent(category -> {
+            categoryRepository.removeCategoryFromBooks(id);
+            categoryRepository.deleteById(id);
+        });
     }
 }
