@@ -1,5 +1,7 @@
 package com.example.demo.member.service;
 
+import com.example.demo.exception.AppException;
+import com.example.demo.exception.ErrorCode;
 import com.example.demo.member.dto.MemberRequestDto;
 import com.example.demo.member.dto.MemberResponseDto;
 import com.example.demo.member.entity.Member;
@@ -20,7 +22,7 @@ public class MemberService {
 
     public Member joinMember(MemberRequestDto memberRequestDto) {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다: " + memberRequestDto.getEmail());
+            throw new AppException(ErrorCode.ALREADY_REGISTERED_EMAIL, memberRequestDto.getEmail());
         }
 
         Member member = new Member();
@@ -41,6 +43,6 @@ public class MemberService {
 
     public Member getMember(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("회원 아이디 " + id + "를 찾을 수 없습니다."));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND_ACCOUNT_ID, id));
     }
 }

@@ -2,6 +2,8 @@ package com.example.demo.book.entity;
 
 import com.example.demo.book.dto.BookRequestDto;
 import com.example.demo.category.entity.Category;
+import com.example.demo.exception.AppException;
+import com.example.demo.exception.ErrorCode;
 import com.example.demo.tag.entity.Tag;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -16,41 +18,50 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(indexes = @Index(name = "idx_book_categoryid", columnList = "category_id"))
 public class Book {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String bookName;
 
+    @Column
     private String bookWriter;
 
+    @Column
     private String year;
 
+    @Column(unique = true)
     private String ISBN;
 
-    private int rentalCount;
+    @Column
+    private Integer rentalCount;
 
-    private int bookQuantity;
+    @Column
+    private Integer bookQuantity;
 
     @Version
     private Integer version;  // Optimistic Lock 관리를 위한 버전 필드
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id",foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Category category;
 
     @ManyToMany
     @JoinTable(
             name = "book_tag",
             joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
+            inverseJoinColumns = @JoinColumn(name = "tag_id"),
+            uniqueConstraints = @UniqueConstraint(name = "book_tag_unique", columnNames = {"book_id", "tag_id"})
     )
     private Set<Tag> tags = new HashSet<>();
 
     public void rentBook() {
         if (bookQuantity <= 0) {
-            throw new IllegalStateException("대여 가능 수량이 부족합니다.");
+            throw new AppException(ErrorCode.EXCEEDED_LIMIT_RENTAL_BOOK);
         }
         this.bookQuantity--;
     }
@@ -74,7 +85,7 @@ public class Book {
         category.getBooks().add(this);
     }
 
-    public void update(BookRequestDto book){
+    public void update(BookRequestDto book) {
         this.bookName = book.getBookName();
         this.bookWriter = book.getBookWriter();
         this.year = book.getYear();
@@ -82,7 +93,7 @@ public class Book {
         this.bookQuantity = book.getBookQuantity();
     }
 
-    public Book(Book entity){
+    public Book(Book entity) {
         this.id = entity.getId();
         this.bookName = entity.getBookName();
         this.bookWriter = entity.getBookWriter();
@@ -92,7 +103,7 @@ public class Book {
     }
 
     @Builder
-    public Book(BookRequestDto bookRequestDto){
+    public Book(BookRequestDto bookRequestDto) {
         this.bookName = bookRequestDto.getBookName();
         this.bookWriter = bookRequestDto.getBookWriter();
         this.year = bookRequestDto.getYear();
