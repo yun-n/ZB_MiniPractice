@@ -5,6 +5,7 @@ import com.example.demo.member.dto.MemberResponseDto;
 import com.example.demo.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class MemberController {
     }
 
     @PostMapping("/api/v1/users")
-    public MemberResponseDto joinMember(@RequestBody MemberRequestDto memberRequestDto){
+    public MemberResponseDto joinMember(@Valid @RequestBody MemberRequestDto memberRequestDto){
         return new MemberResponseDto(memberService.joinMember(memberRequestDto));
     }
 

@@ -7,6 +7,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.event.EventListener;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
@@ -14,6 +19,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
+@Table(indexes = {
+        @Index(name = "idx_rental_memberid", columnList = "member_id"),
+        @Index(name = "idx_rental_bookid", columnList = "book_id")
+})
 public class Rental {
 
     @Id
@@ -21,20 +31,31 @@ public class Rental {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @JsonIgnore
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
+    @JoinColumn(name = "book_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @JsonIgnore
     private Book book;
 
+    @Column
     private LocalDate rentalDate;
 
+    @Column
     private LocalDate dueDate;
 
+    @Column
     private boolean isReturned;
+
+    @Column
+    @CreatedDate
+    private LocalDate createdAt;
+
+    @Column
+    @LastModifiedDate
+    private LocalDate updatedAt;
 
     public Rental(Member member, Book book){
         this.member = member;

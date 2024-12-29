@@ -20,13 +20,17 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 20)
     private String username;
 
+    @Column
     private String password;
 
+    @Column
     private String email;
 
     @CreatedDate
